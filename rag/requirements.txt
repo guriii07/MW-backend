@@ -1,0 +1,5 @@
+flask
+faiss-cpu
+transformers
+sentence-transformers
+torch
