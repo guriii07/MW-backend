@@ -1,12 +1,18 @@
+import sys
+print("Python sys.path:", sys.path)
+
 from flask import Flask, request, jsonify
-from transformers import pipeline
 from flask_cors import CORS
+from rag.rag_engine import RAGEngine
+
+
+
 
 app = Flask(__name__)
-CORS(app)  # ✅ Allows frontend to access from other ports
+CORS(app)
 
-# Load GPT-2 using pipeline
-generator = pipeline("text-generation", model="gpt2")
+# ✅ Initialize RAG engine once when the app starts
+rag_engine = RAGEngine()
 
 @app.route("/ask", methods=["POST"])
 def ask():
@@ -16,8 +22,8 @@ def ask():
         return jsonify({"error": "Missing query"}), 400
 
     try:
-        result = generator(query, max_length=100, num_return_sequences=1, do_sample=True)
-        response = result[0]["generated_text"]
+        # ✅ Generate response using RAG + GPT-2
+        response = rag_engine.generate_answer(query)
         return jsonify({"answer": response})
     except Exception as e:
         print("❌ Error during generation:", e)
@@ -25,4 +31,3 @@ def ask():
 
 if __name__ == "__main__":
     app.run(port=5001, debug=True)
-CORS(app)
