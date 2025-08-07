@@ -17,7 +17,7 @@ class RAGEngine:
         self.documents = []
         self.doc_texts = []
         self.index = None
-        self.generator = pipeline("text-generation", model="gpt2", max_new_tokens=60, temperature=0.7, top_p=0.95)
+        self.generator = pipeline("text-generation", model="gpt2", max_new_tokens=150, temperature=0.7, top_p=0.95)
 
         
 
